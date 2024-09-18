@@ -1,0 +1,76 @@
+class Array2D:
+    def __init__(self, filas, cols):
+        self._data = [[0 for _ in range(cols)] for _ in range(filas)]
+        self.filas = filas
+        self.cols = cols
+
+    def get(self, fila, col):
+        return self._data[fila][col]
+
+    def set(self, fila, col, value):
+        self._data[fila][col] = value
+
+    def num_filas(self):
+        return self.filas
+
+    def num_cols(self):
+        return self.cols
+
+    def print_array(self):
+        for fila in self._data:
+            print(fila)
+
+filas = int(input("Introduce el número de filas del tablero: "))
+cols = int(input("Introduce el número de columnas del tablero: "))
+
+board = Array2D(filas, cols)
+
+num_cells = int(input("¿Cuántas celdas vivas quieres activar al inicio? "))
+
+for _ in range(num_cells):
+    while True:
+        try:
+            fila = int(input(f"Introduce la fila (0-{filas-1}) de la celda viva: "))
+            col = int(input(f"Introduce la columna (0-{cols-1}) de la celda viva: "))
+            if 0 <= fila < filas and 0 <= col < cols:
+                board.set(fila, col, 1)
+                break
+            else:
+                print(f"Las coordenadas deben estar entre 0 y {filas-1} para filas y entre 0 y {cols-1} para columnas.")
+        except ValueError:
+            print("Por favor, introduce un número válido.")
+
+def contar_vecinos(board, fila, col):
+
+    vecinos = 0
+    for i in range(-1, 2):
+        for j in range(-1, 2):
+            if i == 0 and j == 0:
+                continue
+            if 0 <= fila + i < board.num_filas() and 0 <= col + j < board.num_cols():
+                vecinos += board.get(fila + i, col + j)
+    return vecinos
+
+def update_board(board):
+
+    new_board = Array2D(board.num_filas(), board.num_cols())
+    for fila in range(board.num_filas()):
+        for col in range(board.num_cols()):
+            vecinos_vivos = contar_vecinos(board, fila, col)
+            
+            if board.get(fila, col) == 1:
+                if vecinos_vivos < 2 or vecinos_vivos > 3:
+                    new_board.set(fila, col, 0)
+                else:
+                    new_board.set(fila, col, 1)
+            else:
+                if vecinos_vivos == 3:
+                    new_board.set(fila, col, 1)
+    return new_board
+
+generaciones = 10 
+for gen in range(generaciones):
+    print(f"Generación {gen + 1}:")
+    board.print_array()
+    board = update_board(board)
+    print("\n")
