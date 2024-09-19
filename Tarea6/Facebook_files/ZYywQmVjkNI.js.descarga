@@ -1,3 +1,0 @@
-;/*FB_PKG_DELIM*/
-
-__d("useIsSecureMessageData",["ReQL","ReQLSuspense","useIsSecureMessage","useReStore"],(function(a,b,c,d,e,f,g){"use strict";var h;function a(a,b){var e=(h||(h=c("useReStore")))(),g=d("ReQLSuspense").useFirst(function(){if(a==null)return d("ReQL").empty();var b=a.messageId,c=a.messageThreadKey,f=a.messageTimestamp;return d("ReQL").fromTableAscending(e.tables.messages).getKeyRange(c,f,b)},[a,e.tables.messages],f.id+":37");g=c("useIsSecureMessage")(e,g,b);return g}g["default"]=a}),98);
